@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Yeni Profil",
+    "Projects": [
+      {
+        "Path": "MusicStreamingPrototype.API\\MusicStreamingPrototype.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MusicStreamingPrototype.UI\\MusicStreamingPrototype.UI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

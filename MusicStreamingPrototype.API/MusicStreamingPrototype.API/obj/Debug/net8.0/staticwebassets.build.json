@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Oxtq90wwc6ALAgSNcS+VFcKPobi0GcmUdgW2LP3aHpI=",
+  "Source": "MusicStreamingPrototype.API",
+  "BasePath": "_content/MusicStreamingPrototype.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

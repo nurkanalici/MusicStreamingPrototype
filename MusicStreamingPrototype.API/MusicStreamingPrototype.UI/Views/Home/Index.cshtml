@@ -1,0 +1,91 @@
+﻿@model MusicStreamingPrototype.UI.Models.UserHomeViewModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<h1>Hoş geldin, @User.Identity.Name!</h1>
+
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="input-group">
+        <input type="text"
+               name="query"
+               value="@Model.Query"
+               class="form-control"
+               placeholder="Şarkı ara..." />
+        <button class="btn btn-primary">Ara</button>
+    </div>
+</form>
+
+@if (Model.SearchResults != null && Model.SearchResults.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Başlık</th>
+                <th>Sanatçı</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.SearchResults)
+            {
+                var isArchived = Model.ArchivedTrackIds.Contains(t.Id);
+                <tr>
+                    <td>@t.Title</td>
+                    <td>@t.Artist</td>
+                    <td>
+                        @if (isArchived)
+                        {
+                            <form method="post" asp-action="RemoveFromArchive" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="trackId" value="@t.Id" />
+                                <button type="submit" class="btn btn-sm btn-warning">
+                                    Arşivden Çıkar
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-action="AddToArchive" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="trackId" value="@t.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    Arşive Ekle
+                                </button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Henüz arama yapılmadı veya sonuç bulunamadı.</p>
+}
+
+<hr />
+
+<h3>Çalma Listelerim</h3>
+@if (Model.Playlists != null && Model.Playlists.Any())
+{
+    <ul class="list-group mb-4">
+        @foreach (var pl in Model.Playlists)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                @pl.Name
+                <a asp-controller="Playlist"
+                   asp-action="Details"
+                   asp-route-id="@pl.Id"
+                   class="btn btn-sm btn-outline-secondary">
+                    İncele
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Henüz bir çalma listeniz yok. <a asp-controller="Playlist" asp-action="Create">Yeni çalma listesi oluşturun.</a></p>
+}

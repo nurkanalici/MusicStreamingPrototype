@@ -1,0 +1,62 @@
+﻿@model MusicStreamingPrototype.UI.Models.PlaylistDetailsViewModel
+@{
+    ViewData["Title"] = Model.Playlist.Name;
+}
+
+<h2>@Model.Playlist.Name</h2>
+@if (!string.IsNullOrEmpty(Model.Playlist.Description))
+{
+    <p>@Model.Playlist.Description</p>
+}
+
+<h3>Çalma Listesindeki Şarkılar</h3>
+<table class="table">
+    <thead>
+        <tr><th>Başlık</th><th>Sanatçı</th><th>İşlem</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model.Tracks)
+        {
+            <tr>
+                <td>@t.Title</td>
+                <td>@t.Artist</td>
+                <td>
+                    <form asp-controller="Playlist" asp-action="RemoveTrack" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="playlistId" value="@Model.Playlist.Id" />
+                        <input type="hidden" name="trackId" value="@t.Id" />
+                        <button class="btn btn-sm btn-danger">Listeyi Güncelle (Çıkar)</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Arşivimdeki Şarkılar</h3>
+<table class="table">
+    <thead>
+        <tr><th>Başlık</th><th>Sanatçı</th><th>İşlem</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var at in Model.ArchivedTracks)
+        {
+            // Sadece listede olmayanları gösteriyoruz
+            if (Model.Tracks.Any(t => t.Id == at.Id)) continue;
+            <tr>
+                <td>@at.Title</td>
+                <td>@at.Artist</td>
+                <td>
+                    <form asp-controller="Playlist" asp-action="AddTrack" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="playlistId" value="@Model.Playlist.Id" />
+                        <input type="hidden" name="trackId" value="@at.Id" />
+                        <button class="btn btn-sm btn-success">Listeyi Güncelle (Ekle)</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Ana Sayfaya Dön</a>
